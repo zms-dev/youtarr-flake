@@ -186,9 +186,9 @@ in
         DB_PORT = toString cfg.database.port;
         DB_USER = cfg.database.user;
         DB_NAME = cfg.database.name;
-        YOUTUBE_OUTPUT_DIR = cfg.youtubeOutputDir;
+        YOUTUBE_OUTPUT_DIR = "${cfg.youtubeOutputDir}";
         YOUTARR_CONFIG_PATH = "${cfg.dataDir}/config/config.json";
-        DATA_PATH = "${cfg.dataDir}/data";
+        DATA_PATH = "${cfg.youtubeOutputDir}";
         AUTH_ENABLED = lib.boolToString cfg.auth.enable;
       }
       // lib.optionalAttrs (cfg.auth.presetUsername != null) {
