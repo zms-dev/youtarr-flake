@@ -1,11 +1,17 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.youtarr;
-  configFile = (pkgs.formats.json {}).generate "youtarr-config.json" cfg.settings;
-in {
+  configFile = (pkgs.formats.json { }).generate "youtarr-config.json" cfg.settings;
+in
+{
   options.services.youtarr = {
     enable = mkEnableOption "Youtarr YouTube DVR service";
 
@@ -120,6 +126,6 @@ in {
       description = "Youtarr daemon user";
       home = cfg.dataDir;
     };
-    users.groups.youtarr = {};
+    users.groups.youtarr = { };
   };
 }
