@@ -81,6 +81,34 @@ in
       };
     };
 
+    auth = {
+      enable = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Enable built-in authentication.";
+      };
+      presetUsername = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = "Pre-configured admin username for automated deployments.";
+      };
+      presetPasswordFile = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        description = ''
+          Path to a file containing the preset admin password.
+          The file must contain a line like:
+          AUTH_PRESET_PASSWORD=your_admin_password
+        '';
+      };
+    };
+
+    environmentFile = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      description = "Path to an environment file containing additional custom environment variables.";
+    };
+
     settings = import ./settings.nix { inherit lib pkgs; };
   };
 
@@ -105,7 +133,10 @@ in
         '';
 
         ExecStart = "${cfg.package}/bin/youtarr";
-        EnvironmentFile = lib.optional (cfg.database.passwordFile != null) cfg.database.passwordFile;
+        EnvironmentFile =
+          (lib.optional (cfg.database.passwordFile != null) cfg.database.passwordFile)
+          ++ (lib.optional (cfg.auth.presetPasswordFile != null) cfg.auth.presetPasswordFile)
+          ++ (lib.optional (cfg.environmentFile != null) cfg.environmentFile);
         Restart = "on-failure";
         RestartSec = "5s";
       };
@@ -120,6 +151,10 @@ in
         YOUTUBE_OUTPUT_DIR = cfg.youtubeOutputDir;
         YOUTARR_CONFIG_PATH = "${cfg.dataDir}/config/config.json";
         DATA_PATH = "${cfg.dataDir}/data";
+        AUTH_ENABLED = lib.boolToString cfg.auth.enable;
+      }
+      // lib.optionalAttrs (cfg.auth.presetUsername != null) {
+        AUTH_PRESET_USERNAME = cfg.auth.presetUsername;
       };
     };
 

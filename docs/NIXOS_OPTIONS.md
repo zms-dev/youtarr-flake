@@ -58,7 +58,81 @@ pkgs.callPackage ../pkgs/youtarr.nix { }
 
 
 
+## services.youtarr.auth.enable
+
+Enable built-in authentication.
+
+
+
+*Type:*
+boolean
+
+
+
+*Default:*
+
+```nix
+true
+```
+
+*Declared by:*
+ - [../modules/nixos.nix](../modules/nixos.nix)
+
+
+
+## services.youtarr.auth.presetPasswordFile
+
+
+
+Path to a file containing the preset admin password.
+The file must contain a line like:
+AUTH_PRESET_PASSWORD=your_admin_password
+
+
+
+*Type:*
+null or absolute path
+
+
+
+*Default:*
+
+```nix
+null
+```
+
+*Declared by:*
+ - [../modules/nixos.nix](../modules/nixos.nix)
+
+
+
+## services.youtarr.auth.presetUsername
+
+
+
+Pre-configured admin username for automated deployments.
+
+
+
+*Type:*
+null or string
+
+
+
+*Default:*
+
+```nix
+null
+```
+
+*Declared by:*
+ - [../modules/nixos.nix](../modules/nixos.nix)
+
+
+
 ## services.youtarr.dataDir
+
+
 
 Storage directory for configurations and cache.
 
@@ -195,6 +269,30 @@ string
 
 ```nix
 "youtarr"
+```
+
+*Declared by:*
+ - [../modules/nixos.nix](../modules/nixos.nix)
+
+
+
+## services.youtarr.environmentFile
+
+
+
+Path to an environment file containing additional custom environment variables.
+
+
+
+*Type:*
+null or absolute path
+
+
+
+*Default:*
+
+```nix
+null
 ```
 
 *Declared by:*
