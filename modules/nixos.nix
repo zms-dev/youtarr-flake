@@ -10,6 +10,9 @@ with lib;
 let
   cfg = config.services.youtarr;
   configFile = (pkgs.formats.json { }).generate "youtarr-config.json" cfg.settings;
+
+  youtarr-client = pkgs.callPackage ../pkgs/youtarr-client.nix { };
+  youtarrPkg = pkgs.callPackage ../pkgs/youtarr.nix { inherit youtarr-client; };
 in
 {
   options.services.youtarr = {
@@ -17,9 +20,9 @@ in
 
     package = mkOption {
       type = types.package;
-      default = pkgs.youtarr;
-      defaultText = literalExpression "pkgs.youtarr";
-      description = "The Youtarr package to use. Typically supplied by the flake overlay.";
+      default = youtarrPkg;
+      defaultText = literalExpression "pkgs.callPackage ../pkgs/youtarr.nix { }";
+      description = "The Youtarr package to use.";
     };
 
     port = mkOption {

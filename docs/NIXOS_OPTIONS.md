@@ -38,7 +38,7 @@ true
 
 
 
-The Youtarr package to use. Typically supplied by the flake overlay.
+The Youtarr package to use.
 
 
 
@@ -50,7 +50,7 @@ package
 *Default:*
 
 ```nix
-pkgs.youtarr
+pkgs.callPackage ../pkgs/youtarr.nix { }
 ```
 
 *Declared by:*
