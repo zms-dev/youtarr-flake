@@ -4,7 +4,7 @@ with lib;
 
 lib.mkOption {
   type = types.submodule {
-    freeformType = (pkgs.formats.json {}).type;
+    freeformType = (pkgs.formats.json { }).type;
 
     options = {
       channelFilesToDownload = mkOption {
@@ -93,7 +93,7 @@ lib.mkOption {
 
       plexSubfolderLibraryMappings = mkOption {
         type = types.listOf types.anything;
-        default = [];
+        default = [ ];
         description = "Mappings of download folders to Plex libraries.";
       };
 
@@ -110,7 +110,10 @@ lib.mkOption {
       };
 
       sponsorblockAction = mkOption {
-        type = types.enum [ "remove" "mark" ];
+        type = types.enum [
+          "remove"
+          "mark"
+        ];
         default = "remove";
         description = "Action to perform with SponsorBlock categories.";
       };
@@ -118,17 +121,49 @@ lib.mkOption {
       sponsorblockCategories = mkOption {
         type = types.submodule {
           options = {
-            sponsor = mkOption { type = types.bool; default = true; description = "Remove sponsor segments."; };
-            intro = mkOption { type = types.bool; default = false; description = "Remove intro segments."; };
-            outro = mkOption { type = types.bool; default = false; description = "Remove outro segments."; };
-            selfpromo = mkOption { type = types.bool; default = true; description = "Remove selfpromo segments."; };
-            preview = mkOption { type = types.bool; default = false; description = "Remove preview segments."; };
-            filler = mkOption { type = types.bool; default = false; description = "Remove filler segments."; };
-            interaction = mkOption { type = types.bool; default = false; description = "Remove interaction segments."; };
-            music_offtopic = mkOption { type = types.bool; default = false; description = "Remove music/offtopic segments."; };
+            sponsor = mkOption {
+              type = types.bool;
+              default = true;
+              description = "Remove sponsor segments.";
+            };
+            intro = mkOption {
+              type = types.bool;
+              default = false;
+              description = "Remove intro segments.";
+            };
+            outro = mkOption {
+              type = types.bool;
+              default = false;
+              description = "Remove outro segments.";
+            };
+            selfpromo = mkOption {
+              type = types.bool;
+              default = true;
+              description = "Remove selfpromo segments.";
+            };
+            preview = mkOption {
+              type = types.bool;
+              default = false;
+              description = "Remove preview segments.";
+            };
+            filler = mkOption {
+              type = types.bool;
+              default = false;
+              description = "Remove filler segments.";
+            };
+            interaction = mkOption {
+              type = types.bool;
+              default = false;
+              description = "Remove interaction segments.";
+            };
+            music_offtopic = mkOption {
+              type = types.bool;
+              default = false;
+              description = "Remove music/offtopic segments.";
+            };
           };
         };
-        default = {};
+        default = { };
         description = "Enabled SponsorBlock categories.";
       };
 
@@ -230,7 +265,7 @@ lib.mkOption {
 
       appriseUrls = mkOption {
         type = types.listOf types.anything;
-        default = [];
+        default = [ ];
         description = "Configured Apprise notification endpoints.";
       };
 
@@ -295,7 +330,11 @@ lib.mkOption {
       };
 
       ytdlpIpFamily = mkOption {
-        type = types.enum [ "ipv4" "ipv6" "any" ];
+        type = types.enum [
+          "ipv4"
+          "ipv6"
+          "any"
+        ];
         default = "ipv4";
         description = "Preferred IP family for yt-dlp.";
       };
@@ -338,7 +377,7 @@ lib.mkOption {
 
       jellyfinVideoLibraryIds = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = "Jellyfin section directories identifiers.";
       };
 
@@ -368,12 +407,12 @@ lib.mkOption {
 
       embyVideoLibraryIds = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = "Emby directories IDs.";
       };
     };
   };
-  default = {};
+  default = { };
   description = ''
     Declarative configuration options for Youtarr's <filename>config.json</filename>.
   '';

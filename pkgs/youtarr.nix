@@ -1,14 +1,15 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
-, makeWrapper
-, nodejs
-, ffmpeg
-, yt-dlp
-, atomicparsley
-, apprise
-, youtarr-client
-, nix-update-script
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  makeWrapper,
+  nodejs,
+  ffmpeg,
+  yt-dlp,
+  atomicparsley,
+  apprise,
+  youtarr-client,
+  nix-update-script,
 }:
 
 let
@@ -74,7 +75,14 @@ buildNpmPackage {
     # Wrap the node binary, prefixing PATH with runtime dependencies
     makeWrapper ${nodejs}/bin/node $out/bin/youtarr \
       --add-flags "$out/libexec/youtarr/server/server.js" \
-      --prefix PATH : ${lib.makeBinPath [ ffmpeg yt-dlp atomicparsley apprise ]} \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          ffmpeg
+          yt-dlp
+          atomicparsley
+          apprise
+        ]
+      } \
       --set NODE_ENV "production"
   '';
 
