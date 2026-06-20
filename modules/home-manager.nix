@@ -12,7 +12,13 @@ let
   configFile = (pkgs.formats.json { }).generate "youtarr-config.json" cfg.settings;
 
   youtarr-client = pkgs.callPackage ../pkgs/youtarr-client.nix { };
-  youtarrPkg = pkgs.callPackage ../pkgs/youtarr.nix { inherit youtarr-client; };
+  youtarrPkg = pkgs.callPackage ../pkgs/youtarr.nix {
+    inherit youtarr-client;
+    ffmpeg = cfg.ffmpegPackage;
+    yt-dlp = cfg.ytdlpPackage;
+    atomicparsley = cfg.atomicparsleyPackage;
+    apprise = cfg.apprisePackage;
+  };
 in
 {
   options.services.youtarr = {
@@ -23,6 +29,34 @@ in
       default = youtarrPkg;
       defaultText = literalExpression "pkgs.callPackage ../pkgs/youtarr.nix { }";
       description = "The Youtarr package to use.";
+    };
+
+    ffmpegPackage = mkOption {
+      type = types.package;
+      default = pkgs.ffmpeg;
+      defaultText = literalExpression "pkgs.ffmpeg";
+      description = "The ffmpeg package to use.";
+    };
+
+    ytdlpPackage = mkOption {
+      type = types.package;
+      default = pkgs.yt-dlp;
+      defaultText = literalExpression "pkgs.yt-dlp";
+      description = "The yt-dlp package to use.";
+    };
+
+    atomicparsleyPackage = mkOption {
+      type = types.package;
+      default = pkgs.atomicparsley;
+      defaultText = literalExpression "pkgs.atomicparsley";
+      description = "The atomicparsley package to use.";
+    };
+
+    apprisePackage = mkOption {
+      type = types.package;
+      default = pkgs.apprise;
+      defaultText = literalExpression "pkgs.apprise";
+      description = "The apprise package to use.";
     };
 
     port = mkOption {

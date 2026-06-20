@@ -58,7 +58,55 @@ pkgs.callPackage ../pkgs/youtarr.nix { }
 
 
 
+## services.youtarr.apprisePackage
+
+The apprise package to use.
+
+
+
+*Type:*
+package
+
+
+
+*Default:*
+
+```nix
+pkgs.apprise
+```
+
+*Declared by:*
+ - [../modules/nixos.nix](../modules/nixos.nix)
+
+
+
+## services.youtarr.atomicparsleyPackage
+
+
+
+The atomicparsley package to use.
+
+
+
+*Type:*
+package
+
+
+
+*Default:*
+
+```nix
+pkgs.atomicparsley
+```
+
+*Declared by:*
+ - [../modules/nixos.nix](../modules/nixos.nix)
+
+
+
 ## services.youtarr.auth.enable
+
+
 
 Enable built-in authentication.
 
@@ -293,6 +341,30 @@ null or absolute path
 
 ```nix
 null
+```
+
+*Declared by:*
+ - [../modules/nixos.nix](../modules/nixos.nix)
+
+
+
+## services.youtarr.ffmpegPackage
+
+
+
+The ffmpeg package to use.
+
+
+
+*Type:*
+package
+
+
+
+*Default:*
+
+```nix
+pkgs.ffmpeg
 ```
 
 *Declared by:*
@@ -1997,6 +2069,30 @@ absolute path
 
 ```nix
 "/var/lib/youtarr/downloads"
+```
+
+*Declared by:*
+ - [../modules/nixos.nix](../modules/nixos.nix)
+
+
+
+## services.youtarr.ytdlpPackage
+
+
+
+The yt-dlp package to use.
+
+
+
+*Type:*
+package
+
+
+
+*Default:*
+
+```nix
+pkgs.yt-dlp
 ```
 
 *Declared by:*

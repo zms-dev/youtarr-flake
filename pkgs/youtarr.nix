@@ -46,8 +46,8 @@ buildNpmPackage {
       --replace "path.join(__dirname, '../../config/config.json')" "process.env.YOUTARR_CONFIG_PATH || path.join(__dirname, '../../config/config.json')" \
       --replace "path.join(__dirname, '../../config/images')" "path.join(path.dirname(this.configPath), 'images')" \
       --replace "path.join(__dirname, '../../config/jobs')" "path.join(path.dirname(this.configPath), 'jobs')" \
-      --replace "'/usr/bin/ffmpeg'" "'ffmpeg'" \
-      --replace "'/usr/bin/AtomicParsley'" "'AtomicParsley'"
+      --replace "'/usr/bin/ffmpeg'" "'${lib.getExe ffmpeg}'" \
+      --replace "'/usr/bin/AtomicParsley'" "'${lib.getExe atomicparsley}'"
 
     substituteInPlace server/modules/archiveModule.js \
       --replace "path.join(__dirname, '../../config', 'complete.list')" "process.env.YOUTARR_CONFIG_PATH ? path.join(path.dirname(process.env.YOUTARR_CONFIG_PATH), 'complete.list') : path.join(__dirname, '../../config', 'complete.list')"
@@ -79,6 +79,7 @@ buildNpmPackage {
       --add-flags "$out/libexec/youtarr/server/server.js" \
       --prefix PATH : ${
         lib.makeBinPath [
+          nodejs
           ffmpeg
           yt-dlp
           atomicparsley
