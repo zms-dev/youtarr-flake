@@ -102,7 +102,7 @@ Declare settings on a per-user level using user systemd services:
 If you want to use a custom or newer version of a runtime dependency (for instance, a specific git release of `yt-dlp` or a custom-compiled `ffmpeg`), you can override the packages passed to Youtarr's derivation using Nix's standard `.override` pattern:
 
 ```nix
-services.youtarr.package = pkgs.youtarr.override {
+services.youtarr.package = inputs.youtarr-flake.packages.${pkgs.system}.default.override {
   # Use a custom yt-dlp package override
   yt-dlp = pkgs.yt-dlp.overrideAttrs (oldAttrs: {
     version = "2026.06.20";
