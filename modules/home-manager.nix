@@ -12,7 +12,13 @@ let
   configFile = (pkgs.formats.json { }).generate "youtarr-config.json" cfg.settings;
 
   youtarr-client = pkgs.callPackage ../pkgs/youtarr-client.nix { };
-  youtarrPkg = pkgs.callPackage ../pkgs/youtarr.nix { inherit youtarr-client; };
+  youtarrPkg = pkgs.callPackage ../pkgs/youtarr.nix {
+    inherit youtarr-client;
+    ffmpeg = cfg.ffmpegPackage;
+    yt-dlp = cfg.ytdlpPackage;
+    atomicparsley = cfg.atomicparsleyPackage;
+    apprise = cfg.apprisePackage;
+  };
 in
 {
   options.services.youtarr = {
@@ -23,6 +29,34 @@ in
       default = youtarrPkg;
       defaultText = literalExpression "pkgs.callPackage ../pkgs/youtarr.nix { }";
       description = "The Youtarr package to use.";
+    };
+
+    ffmpegPackage = mkOption {
+      type = types.package;
+      default = pkgs.ffmpeg;
+      defaultText = literalExpression "pkgs.ffmpeg";
+      description = "The ffmpeg package to use.";
+    };
+
+    ytdlpPackage = mkOption {
+      type = types.package;
+      default = pkgs.yt-dlp;
+      defaultText = literalExpression "pkgs.yt-dlp";
+      description = "The yt-dlp package to use.";
+    };
+
+    atomicparsleyPackage = mkOption {
+      type = types.package;
+      default = pkgs.atomicparsley;
+      defaultText = literalExpression "pkgs.atomicparsley";
+      description = "The atomicparsley package to use.";
+    };
+
+    apprisePackage = mkOption {
+      type = types.package;
+      default = pkgs.apprise;
+      defaultText = literalExpression "pkgs.apprise";
+      description = "The apprise package to use.";
     };
 
     port = mkOption {
@@ -83,6 +117,34 @@ in
       };
     };
 
+    auth = {
+      enable = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Enable built-in authentication.";
+      };
+      presetUsername = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = "Pre-configured admin username for automated deployments.";
+      };
+      presetPasswordFile = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        description = ''
+          Path to a file containing the preset admin password.
+          The file must contain a line like:
+          AUTH_PRESET_PASSWORD=your_admin_password
+        '';
+      };
+    };
+
+    environmentFile = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      description = "Path to an environment file containing additional custom environment variables.";
+    };
+
     settings = import ./settings.nix { inherit lib pkgs; };
   };
 
@@ -109,7 +171,10 @@ in
         '';
 
         ExecStart = "${cfg.package}/bin/youtarr";
-        EnvironmentFile = lib.optional (cfg.database.passwordFile != null) cfg.database.passwordFile;
+        EnvironmentFile =
+          (lib.optional (cfg.database.passwordFile != null) cfg.database.passwordFile)
+          ++ (lib.optional (cfg.auth.presetPasswordFile != null) cfg.auth.presetPasswordFile)
+          ++ (lib.optional (cfg.environmentFile != null) cfg.environmentFile);
         Restart = "on-failure";
         RestartSec = "5s";
       };
@@ -121,9 +186,13 @@ in
         DB_PORT = toString cfg.database.port;
         DB_USER = cfg.database.user;
         DB_NAME = cfg.database.name;
-        YOUTUBE_OUTPUT_DIR = cfg.youtubeOutputDir;
+        YOUTUBE_OUTPUT_DIR = "${cfg.youtubeOutputDir}";
         YOUTARR_CONFIG_PATH = "${cfg.dataDir}/config/config.json";
-        DATA_PATH = "${cfg.dataDir}/data";
+        DATA_PATH = "${cfg.youtubeOutputDir}";
+        AUTH_ENABLED = lib.boolToString cfg.auth.enable;
+      }
+      // lib.optionalAttrs (cfg.auth.presetUsername != null) {
+        AUTH_PRESET_USERNAME = cfg.auth.presetUsername;
       };
     };
   };
